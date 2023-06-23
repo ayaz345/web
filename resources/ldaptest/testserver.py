@@ -143,10 +143,7 @@ class LDAPServerFactory(ServerFactory):
 if __name__ == "__main__":
     from twisted.internet import reactor
 
-    if len(sys.argv) == 2:
-        port = int(sys.argv[1])
-    else:
-        port = 389
+    port = int(sys.argv[1]) if len(sys.argv) == 2 else 389
     # First of all, to show logging info in stdout :
     log.startLogging(sys.stderr)
     # We initialize our tree
@@ -160,7 +157,7 @@ if __name__ == "__main__":
     factory.debug = True
     application = service.Application("ldaptor-server")
     myService = service.IServiceCollection(application)
-    serverEndpointStr = "tcp:{}".format(port)
+    serverEndpointStr = f"tcp:{port}"
     e = serverFromString(reactor, serverEndpointStr)
     d = e.listen(factory)
     reactor.run()
